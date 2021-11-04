@@ -7,9 +7,10 @@ import os.path
 
 def print_menu():
     """Printea el menú principal"""
-    menu = ('--' * 40) + '\n\t\t\t\t\t\t\t\tMENÚ DE OPCIONES\n' + ('--' * 40) + '\n1. \n2. \n' \
-           + '3. \n4. \n5. \n' \
-           + '6. Generar binario por idioma\n7. Leer binario\n0. SALIR\n' + ('--' * 40)
+    menu = ('--' * 40) + '\n\t\t\t\t\t\t\t\tMENÚ DE OPCIONES\n' + ('--' * 40) + '\n1. Generar un vector de registros ' \
+    '\n2. Generar una lista de temas  \n' + '3. Cantidad de temas por género y por idioma \n4. Cantidad de temas ' \
+    'musicales para un género\n5. Buscar tema por título \n' + '6. Generar archivo binario por idioma\n7. Leer archivo ' \
+    'binario\n0. ' + 'SALIR\n' + ('--' * 40)
 
     print(menu)
 
@@ -56,12 +57,12 @@ def mostrar_vector(v):
 
 def gen_fd(i):
     fd = 'MusicaIdioma' + str(i) + '.dat'
-    return fd 
+    return fd
 
 
 def gen_binario(i, vec):
     fd = gen_fd(i)
-    
+
     m = open(fd, 'wb')
 
     for item in vec:
@@ -77,7 +78,6 @@ def leer_binario(i):
     tam = os.path.getsize(fd)
 
     m = open(fd, 'rb')
-
     while m.tell() < tam:
         item = pickle.load(m)
         print(item)
@@ -86,7 +86,7 @@ def leer_binario(i):
 
 
 def fill_list(vec, i, vec_reg):
-    index = 0 
+    index = 0
     for elem in range(len(vec_reg)):
         if vec_reg[elem].idioma == i and index <= len(vec) - 1:
             vec[index] = vec_reg[elem]
@@ -100,8 +100,8 @@ def empty_pos(vec):
         if elem == '':
             empty = True
             break
-        
-    return empty 
+
+    return empty
 
 
 def mostrar_lista_opt2(vec):
@@ -131,6 +131,37 @@ def write(f, c, mat):
     print(s)
 
 
+def validar_entre(inf, sup, mensaje):
+    n = int(input(mensaje))
+    while n < inf or n > sup:
+        print('¡ERROR! Tiene que ser un valor mayor a ', inf, 'y menor a', sup, '.')
+        n = int(input(mensaje))
+    return n
+
+
+def validar_mayor_que(inf, mensaje):
+    n = int(input(mensaje))
+    while n <= inf:
+        print('¡ERROR! Tiene que ser un valor mayor a', inf, '.')
+        n = int(input(mensaje))
+    return n
+
+
+def busqueda_binaria(v, x):
+    izq, der = 0, len(v) - 1
+    pos = -1
+    while izq <= der:
+        c = (izq + der) // 2
+        if x == v[c].nom:
+            pos = c
+            break
+        if x < v[c].nom:
+            der = c - 1
+        else:
+            izq = c + 1
+    return pos
+
+
 def principal():
     v = []
     print('prueba')
@@ -139,6 +170,14 @@ def principal():
     i = int(input('Idioma: '))
     gen_binario(i, v)
     leer_binario(i)
+
+
+def contar_gen_mat(m, g):
+    cont = 0
+    for c in range(len(m[0])):
+        if m[g][c]:
+            cont += 1
+    return cont
 
 
 if __name__ == '__main__':
